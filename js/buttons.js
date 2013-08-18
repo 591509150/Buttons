@@ -7,7 +7,7 @@
 
 // the semi-colon before function invocation is a safety net against concatenated
 // scripts and/or other plugins which may not be closed properly.
-;(function ( $, window, document, undefined ) {
+(function ( $, window, document, undefined ) {
     'use strict';
 
     // undefined is used here as the undefined global variable in ECMAScript 3 is
@@ -20,10 +20,9 @@
     // minified (especially when both are regularly referenced in your plugin).
 
     // Create the defaults once
-    var pluginName = "menuButton";
-    var menuClass = ".button-dropdown";
+    var pluginName = 'menuButton';
     var defaults = {
-        propertyName: "value"
+        propertyName: 'value'
     };
 
     // The actual plugin constructor
@@ -50,7 +49,8 @@
             this.toggle();
         },
 
-        toggle: function(el, options) {
+        //function(el, options) are avaialble in toggle method
+        toggle: function() {
             if(this.$element.data('dropdown') === 'show') {
                 this.hideMenu();
             }
@@ -85,12 +85,12 @@
         return this.each(function () {
 
             // TOGGLE BUTTON IF IT EXISTS
-            if ($.data(this, "plugin_" + pluginName)) {
-                $.data(this, "plugin_" + pluginName).toggle();
+            if ($.data(this, 'plugin_' + pluginName)) {
+                $.data(this, 'plugin_' + pluginName).toggle();
             }
             // OTHERWISE CREATE A NEW INSTANCE
             else {
-                $.data(this, "plugin_" + pluginName, new Plugin( this, options ));
+                $.data(this, 'plugin_' + pluginName, new Plugin( this, options ));
             }
         });
     };
