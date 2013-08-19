@@ -22,7 +22,9 @@
 
         updateComplete: function() {
             var data = this.model.toJSON();
-
+            if (data && data.css) {
+                Unicorn.Utils.Zip.generateCustomButtons(data.css);
+            }
             console.log(data);
         },
 

@@ -5,6 +5,10 @@ $border: #EEE;
 $highlight: #d30d15;
 $font: 'Cherry Swash', sans-serif;
 
+.hide {
+    //Hack so we can keep this general but not get defeated by specificity
+    display: none !important;
+}
 
 //TITLE ANIMATIONS
 @-webkit-keyframes title,
@@ -138,7 +142,8 @@ header {
         }
     }
 
-    .button-download {
+    .button-download,
+    .button-generated {
         position: absolute;
         bottom: -74px;
         left: 50%;
