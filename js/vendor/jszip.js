@@ -16,7 +16,6 @@ Usage:
    base64zip = zip.generate();
 
 **/
-"use strict";
 
 /**
  * Representation a of zip file in js

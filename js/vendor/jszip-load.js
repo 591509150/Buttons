@@ -8,7 +8,6 @@ Dual licenced under the MIT license or GPLv3. See LICENSE.markdown.
 
 **/
 /*global JSZip */
-"use strict";
 (function (root) {
 
    var JSZip = root.JSZip;

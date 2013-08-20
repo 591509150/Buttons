@@ -5,21 +5,53 @@ module.exports = function(grunt) {
         clean: {
             dist: ['dist']
         },
+        compass: {
+            dev: {
+                options: {
+                    config: 'config.rb',
+                    sassDir: 'scss',
+                    cssDir: 'css',
+                    force: true
+                }
+            },
+            dist: {
+                options: {
+                    config: 'config.rb',
+                    sassDir: 'scss',
+                    cssDir: 'css',
+                    environment: 'production',
+                    outputStyle: 'compressed',
+                    force: true
+                }
+            }
+        },
+        watch: {
+            sass: {
+                files: ['scss/**/*.scss'],
+                tasks: ['compass:dev']
+            },
+            scripts: {
+                files: ['js/**/*js'],
+            },
+            css: {
+                files: ['*.css']
+            },
+            livereload: {
+                files: ['css/*.css', 'js/**/*.js'],
+                options: { livereload: true }
+            }
+        },
         copy: {
-            // I dunno...feels good to back up concat but not yet minified files :)
-            preUglifyBackup: {
-                files: [{
-                    expand: true,
-                    dot: true,
-                    cwd: 'dist/',
-                    dest: 'dist/backup/',
-                    src: [
-                        '*',
-                        'css/**',
-                        'js/**',
-                    ],
-                    filter: 'isFile'
-                }]
+            // Purpose of this task is to simply copy index.dev.html to index.html
+            // (before usemin task), since usemin will replace our dev js/css includes
+            // with something like src='path/to/all.min.js'. That way, we preserve
+            // our index.dev.html which with all manual includes
+            preUsemin: {
+                files: [{cwd: '.', dest: 'index.html', src: 'index.dev.html'}]
+            },
+            // Copy over all fontawesome fonts to dist/font/
+            fonts: {
+                files: [{expand: true, src: ['font/*'], dest: 'dist/', filter: 'isFile'}]
             }
         },
         concat: {
@@ -42,7 +74,7 @@ module.exports = function(grunt) {
             app: {
                 src: [  'js/buttons.js',
                         'js/app/setup.js',
-                        'ja/app/zip.js',
+                        'js/app/zip.js',
                         'js/app/model.js',
                         'js/app/view-options-menu.js',
                         'js/app/view-showcase.js',
@@ -75,21 +107,23 @@ module.exports = function(grunt) {
             //     dest: 'dist/css/all.min.css'
             // }
         },
+        //Depends on copy:preUsemin task to first copy index.dev.html to index.html
         useminPrepare: {
-            html: ['index.dev.html'],
+            html: ['index.html'],
             options: {
                 dest: ['dest']
             }
         },
         usemin: {
-            html: ['**/*.html'],
-            css: ['**/*.css']
+            html: ['index.html']
+            // css: ['**/*.css']
         }
     });
     grunt.loadNpmTasks('grunt-usemin');
     [
         // 'grunt-contrib-jshint',
-        // 'grunt-contrib-watch',
+        'grunt-contrib-compass',
+        'grunt-contrib-watch',
         'grunt-contrib-clean',
         'grunt-contrib-copy',
         'grunt-contrib-concat',
@@ -97,20 +131,33 @@ module.exports = function(grunt) {
         'grunt-contrib-cssmin',
         'grunt-usemin'
     ].forEach(function(task) { grunt.loadNpmTasks(task); });
-    // grunt.registerTask('prod', ['useminPrepare', 'usemin']);
 
+    // Same as Development without watch
+    grunt.registerTask('default', [
+        'clean:dist',
+        'compass:dev'
+    ]);
+
+    // Development
+    grunt.registerTask('dev', [
+        'clean:dist',
+        'compass:dev',
+        'watch'
+    ]);
+
+    // Production
     grunt.registerTask('prod', [
         'clean:dist',
-        // 'compass:dist',
-        // 'useminPrepare',
+        'compass:dist',
+        'useminPrepare',
         // 'imagemin',
         // 'htmlmin',
         'concat',
         // 'cssmin',
-        // 'copy:preUglifyBackup',//move a copy of concat but NOT minified to dist/backup
+        'copy:preUsemin',//copy index.dev.html to index.html before usemine strips includes
         'uglify',
-        // 'copy',
-        // 'usemin'
+        'copy:fonts',//copy font-awesome fonts
+        'usemin'
     ]);
 
 

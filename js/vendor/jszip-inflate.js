@@ -1,5 +1,3 @@
-"use strict";
-
 (function () {
    if(!JSZip) {
       throw "JSZip not defined";
