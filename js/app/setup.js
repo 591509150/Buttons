@@ -1,7 +1,7 @@
 (function(){
     'use strict';
 
-    /*globals Backbone, _ */
+    /*globals Backbone, _, $ */
 
 
     ////////////////////////////////////////////////
