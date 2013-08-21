@@ -135,13 +135,15 @@ module.exports = function(grunt) {
     // Same as Development without watch
     grunt.registerTask('default', [
         'clean:dist',
-        'compass:dev'
+        'compass:dev',
+        'copy:preUsemin'//copy index.dev.html to index.html
     ]);
 
     // Development
     grunt.registerTask('dev', [
         'clean:dist',
         'compass:dev',
+        'copy:preUsemin',//copy index.dev.html to index.html
         'watch'
     ]);
 
