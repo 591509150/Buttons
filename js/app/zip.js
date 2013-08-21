@@ -6,11 +6,13 @@
     //UTILS ZIP
     Unicorn.Utils.Zip = {
         //Hack since it appears onereadstatechange does not close over outer vars
-        lastButtonsCss: '',
-        generateCustomGrids: function(buttonsCss) {},
-        generateCustomButtons: function(buttonsCss) {
-            //So onreadystatechange can access our _options.scss via Unicorn.Utils.Zip.lastButtonsCss
-            this.lastButtonsCss = buttonsCss || '';
+        lastButtonsArgs: {},
+        generateCustomGrids: function(buttonsCss, optionsScss) {},
+        generateCustomButtons: function(buttonsCss, optionsScss) {
+            //So onreadystatechange can access our _options.scss via Unicorn.Utils.Zip.lastButtonsArgs
+            this.lastButtonsArgs.buttonsCss = buttonsCss || '';
+            this.lastButtonsArgs.optionsScss = optionsScss || '';
+
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '/Buttons/Buttons-Custom.zip', true);
             if (xhr.overrideMimeType) {
@@ -20,7 +22,8 @@
                 if (this.readyState == 4 && this.status == 200) {
                     // First populate zip with our skeleton Buttons-Custom.zip template
                     var zip = new JSZip(this.responseText);
-                    zip.file("css/buttons.css", Unicorn.Utils.Zip.lastButtonsCss);
+                    zip.file("css/buttons.css", Unicorn.Utils.Zip.lastButtonsArgs.buttonsCss);
+                    zip.file("scss/partials/_options.scss", Unicorn.Utils.Zip.lastButtonsArgs.optionsScss);
                     try {
                         // Blob
                         console.log('generating blob');

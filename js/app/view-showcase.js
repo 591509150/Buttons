@@ -29,6 +29,7 @@
         },
 
         updateCodePreview: function(attributes) {
+            debugger;
             this.codebox.html(this.model.toJSON());
 
 

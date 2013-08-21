@@ -38,11 +38,11 @@
         },
 
         parse: function(response) {
-            var styles = {css: ''};
-
+            var styles = {css: '', options: ''};
             // parse can be invoked for fetch and save, in case of save it can be undefined so check before using
-            if (response && response.css) {
-                styles.css = response.css;
+            if (response && response.buttonsCss && response.optionsScss) {
+                styles.css = response.buttonsCss;
+                styles.options = response.optionsScss;
                 // TODO: We'll partition the css with <module_type> so we can potentially have css.buttons, css.grids etc.
                 // return {css: response.css[this.type]};
             }
