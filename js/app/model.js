@@ -24,11 +24,11 @@
                 '$dropdown-link-hover': '#FFF',
                 '$dropdown-link-hover-background': '#3c6ab9',
                 '$button_actions': {
-                    'primary': '#00A1CB #FFF',
-                    'action': '#7db500 #FFF',
-                    'highlight': '#F18D05 #FFF',
-                    'caution': '#E54028 #FFF',
-                    'royal': '#87318C #FFF'
+                    primary: '#00A1CB #FFF',
+                    action: '#7db500 #FFF',
+                    highlight: '#F18D05 #FFF',
+                    caution: '#E54028 #FFF',
+                    royal: '#87318C #FFF'
                     // ... define more as you please
                 },
                 '$button_styles': ['rounded', 'pill', 'circle'],
@@ -37,14 +37,14 @@
             };
         },
 
+        // TODO: We'll partition the css with <module_type> so we can potentially have css.buttons, css.grids etc.
+        // return {css: response.css[this.type]};
+
         parse: function(response) {
             var styles = {css: ''};
 
-            // parse can be invoked for fetch and save, in case of save it can be undefined so check before using
             if (response && response.css) {
                 styles.css = response.css;
-                // TODO: We'll partition the css with <module_type> so we can potentially have css.buttons, css.grids etc.
-                // return {css: response.css[this.type]};
             }
 
             return styles;

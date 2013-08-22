@@ -1,7 +1,7 @@
 (function(){
     'use strict';
 
-    /*globals Unicorn, Backbone */
+    /*globals Unicorn, Backbone, escape, prettyPrint */
 
     //CODE EXAMPLE VIEW
     Unicorn.Views.Showcase = Backbone.View.extend({
@@ -16,8 +16,10 @@
         },
 
         render: function() {
+            //GET UPDATED ATTRIBUTES
             var attrs = this.model.toJSON();
 
+            //UPDATE BUTTONS AND CODE SAMPLE
             this.updateButtons(attrs);
             this.updateCodePreview(attrs);
 
@@ -29,9 +31,14 @@
         },
 
         updateCodePreview: function(attributes) {
-            this.codebox.html(this.model.toJSON());
+            var encodedHTML = this._encodeHTML(this.gallery.html());
+            this.codebox.html(encodedHTML);
 
+            prettyPrint();
+        },
 
+        _encodeHTML: function(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
     });
 })();

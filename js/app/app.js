@@ -1,7 +1,7 @@
 (function(){
     'use strict';
 
-    /*globals Unicorn, Backbone, _ */
+    /*globals Unicorn, Backbone, _, prettyPrint*/
 
 
     //APP CONTROLLER
@@ -22,8 +22,8 @@
             });
 
             //ACTIVATE SHOWCASE VIEWS
-            var showcases = $('.showcase');
-            _.each(showcases, this.createShowCase, this);
+            this.showcases = $('.showcase');
+            _.each(this.showcases, this.createShowCase, this);
 
             return this;
         },
@@ -36,12 +36,11 @@
         },
 
         updateGlobalStyles: function() {
-            var newButtonsData = this.model.toJSON();
+            var css = this.model.get('css');
             var styleTag = $('#custom-styles');
+            styleTag.text(css);
 
-            styleTag.text(newButtonsData.css);
-
-            console.log('done');
+            prettyPrint();
         },
     });
 
@@ -50,6 +49,8 @@
 
     //START APP ON PAGE LOAD
     $(document).ready(function(){
+        prettyPrint();
+
         new Unicorn.Views.App({model: new Unicorn.Models.Button()});
     });
 })();
