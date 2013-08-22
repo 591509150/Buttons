@@ -1,7 +1,7 @@
 (function(){
     'use strict';
 
-    /*globals Unicorn, Backbone, _, prettyPrint*/
+    /*globals Unicorn, Backbone, _, $, prettyPrint*/
 
 
     //APP CONTROLLER

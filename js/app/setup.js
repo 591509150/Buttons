@@ -1,7 +1,7 @@
 (function(){
     'use strict';
 
-    /*globals Backbone, _ */
+    /*globals Backbone, _, $ */
 
 
     ////////////////////////////////////////////////
@@ -32,7 +32,8 @@
     ////////////////////////////////////////////////
     window.Unicorn = {
         Models: {},
-        Views: {}
+        Views: {},
+        Utils: {}
     };
 
 })();
