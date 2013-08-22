@@ -4,10 +4,31 @@
     /*globals Unicorn, Backbone */
 
     //MODEL
-    Unicorn.Models.Button = Backbone.Model.extend({
-        url: 'http://localhost:5000/build', //local
-        //url: 'http://options-compiler.herokuapp.com/build', //production
-
+    Unicorn.Models.Base = Backbone.Model.extend({
+        module: '', //required override e.g. 'buttons', 'grids', etc.
+        url: '', //required override
+        initialize: function() {},
+        /**
+         * Precondition: Decendents of `Models.Base` MUST define `module` and `url`
+         * or `parse` will not work correctly.
+         * @param  {Object} response http response
+         * @return {Object}          Object literal like: `{css:...,options:...}`
+         */
+        parse: function(response) {
+            var styles = {css: '', options: ''};
+            // parse can be invoked for fetch and save, in case of save it can be undefined so check before using
+            if (response && response[this.module] && response.optionsScss) {
+                styles.css = response[this.module];
+                styles.options = response.optionsScss;
+            }
+            return styles;
+        }
+    });
+    Unicorn.Models.Button = Unicorn.Models.Base.extend({
+        module: 'buttons',
+        //Back-end now has route /build/:module where :module will be buttons, grids, etc.
+        url: 'http://localhost:5000/build/buttons',
+        //url: 'http://options-compiler.herokuapp.com/build/'+this.module, //production
         defaults: function() {
             return {
                 '$namespace': '.button',
@@ -35,28 +56,14 @@
                 '$button_sizes': ['large', 'small', 'tiny'],
                 '$circle-size': '120px'
             };
-        },
-
-        // TODO: We'll partition the css with <module_type> so we can potentially have css.buttons, css.grids etc.
-        // return {css: response.css[this.type]};
-
-        parse: function(response) {
-
-            var styles = {css: '', options: ''};
-            // parse can be invoked for fetch and save, in case of save it can be undefined so check before using
-            if (response && response.buttonsCss && response.optionsScss) {
-                styles.css = response.buttonsCss;
-                styles.options = response.optionsScss;
-                // TODO: We'll partition the css with <module_type> so we can potentially have css.buttons, css.grids etc.
-                // return {css: response.css[this.type]};
-            }
-
-            return styles;
-        },
-
-        initialize: function() {
-
-
         }
     });
+    // Unicorn.Models.Grid = Unicorn.Models.Base.extend({
+    //     module: 'grids',
+    //     url: 'http://localhost:5000/build/'+this.module,
+    //     //TODO define defaults here...
+    //     default: function() {
+    //         return {};
+    //     }
+    // });
 })();

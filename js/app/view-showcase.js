@@ -33,7 +33,6 @@
         updateCodePreview: function(attributes) {
             var encodedHTML = this._encodeHTML(this.gallery.html());
             this.codebox.html(encodedHTML);
-
             prettyPrint();
         },
 
