@@ -269,12 +269,13 @@
 })();;(function(){
     'use strict';
 
-    /*globals Unicorn, Backbone */
+    /*globals Unicorn, Backbone, $ */
 
     //MENU BAR
     Unicorn.Views.Menu = Backbone.View.extend({
         events: {
-            'click .button-download a': 'download'
+            'click .button-download a': 'download',
+            'click .button-jsonp a': 'build'
         },
 
         initialize: function() {
@@ -290,16 +291,26 @@
 
         updateComplete: function() {
             var data = this.model.toJSON();
-            if (data && data.css && data.options) {
-                Unicorn.Utils.Zip.generateCustomButtons(data.css, data.options);
-            }
             console.log(data);
+        },
+
+        build: function(e) {
+            e.preventDefault();
+
+            //TODO: Just to ensure our model changes so we do jsonp/sync while we're "spiking"
+            this.model.set('remove_me_later', Math.floor(Math.random()*100));
+            //TODO: Remove above!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            this.model.save();
         },
 
         download: function(e) {
             e.preventDefault();
-
-            this.model.save();
+            var url = 'http://localhost:5000/download/buttons?';
+            var data = this.model.toJSON();
+            url += $.param(data);
+            console.log("URL: ", url);
+            window.open(url, 'Download');
         }
 
     });

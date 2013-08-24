@@ -143,17 +143,21 @@ header {
     }
 
     .button-download,
-    .button-generated {
+    .button-jsonp {
         position: absolute;
         bottom: -74px;
         left: 50%;
-        margin-left: -74px;
         z-index: 10;
-
         .button {
             //color: #2c9adb;
         }
     }
+    // Don't worry Alex ... I know this is ugly .. just hacking :)
+    // Just wanna see the jsonp calls and the download calls separate
+    // before we reskin this thing
+    .button-download{margin-left: -168px;}
+    .button-jsonp {margin-left: 0;}
+
     @media only screen and (max-width: 480px) {
     padding: 70px 0px 80px 0px;
 
