@@ -12,11 +12,14 @@
 
     Backbone.sync = function(method, model, options) {
         options = options || {};
+        // `model.generate` will provide proper data object
+        // in the structure that's expected by server.
+        var data = model.generate();
 
         var params = {
             type: 'POST',
             dataType: 'jsonp',
-            data: model.toJSON(method, model),
+            data: data,
             url: model.url,
         };
 

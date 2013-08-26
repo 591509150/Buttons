@@ -121,11 +121,14 @@
 
     Backbone.sync = function(method, model, options) {
         options = options || {};
+        // `model.generate` will provide proper data object
+        // in the structure that's expected by server.
+        var data = model.generate();
 
         var params = {
             type: 'POST',
             dataType: 'jsonp',
-            data: model.toJSON(method, model),
+            data: data,
             url: model.url,
         };
 
@@ -153,61 +156,17 @@
 ;(function(){
     'use strict';
 
-    /*globals Unicorn, Backbone $ */
-
-    //UTILS ZIP
-    Unicorn.Utils.Zip = {
-        //Hack since it appears onereadstatechange does not close over outer vars
-        lastButtonsArgs: {},
-        generateCustomGrids: function(buttonsCss, optionsScss) {},
-        generateCustomButtons: function(buttonsCss, optionsScss) {
-            //So onreadystatechange can access our _options.scss via Unicorn.Utils.Zip.lastButtonsArgs
-            this.lastButtonsArgs.buttonsCss = buttonsCss || '';
-            this.lastButtonsArgs.optionsScss = optionsScss || '';
-
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', '/Buttons/Buttons-Custom.zip', true);
-            if (xhr.overrideMimeType) {
-                xhr.overrideMimeType('text/plain; charset=x-user-defined');
-            }
-            xhr.onreadystatechange = function(e) {
-                if (this.readyState == 4 && this.status == 200) {
-                    // First populate zip with our skeleton Buttons-Custom.zip template
-                    var zip = new JSZip(this.responseText);
-                    zip.file("css/buttons.css", Unicorn.Utils.Zip.lastButtonsArgs.buttonsCss);
-                    zip.file("scss/partials/_options.scss", Unicorn.Utils.Zip.lastButtonsArgs.optionsScss);
-                    try {
-                        // Blob
-                        console.log('generating blob');
-                        var blob = zip.generate({type:"blob"});
-                        // The Download button we start with
-                        var downloadButton = $('.button-download a');
-                        // The Buttons-Customs.zip we'll replace Download with
-                        var blobLink = $('.button-generated a');
-                        var generatedWrap = $('.button-generated');
-                        $(blobLink).attr('download', 'Buttons-Custom.zip');
-                        $(blobLink).attr('href', window.URL.createObjectURL(blob));
-                        $(downloadButton).hide();
-                        $(generatedWrap).removeClass("hide");
-                    } catch(e) {
-                        blobLink.innerHTML += " (not supported on this browser)";
-                    }
-                }
-            };
-            xhr.send();
-        }
-    };
-})();
-;(function(){
-    'use strict';
-
-    /*globals Unicorn, Backbone */
+    /*globals Unicorn, Backbone _ */
 
     //MODEL
     Unicorn.Models.Base = Backbone.Model.extend({
         module: '', //required override e.g. 'buttons', 'grids', etc.
         url: '', //required override
+        // Black listed properties to omit when building http requests
+        // from model. Used by `generate` callback.
+        blackList: ['css', 'options'],
         initialize: function() {},
+
         /**
          * Precondition: Decendents of `Models.Base` MUST define `module` and `url`
          * or `parse` will not work correctly.
@@ -222,6 +181,48 @@
                 styles.options = response.optionsScss;
             }
             return styles;
+        },
+        /**
+         * `generate` is a required callback that must be implemented by "sub-classes"
+         * of Unicorn.Models.Base, and must generate an object with the following
+         * properties:
+         * <pre>
+         * {
+         *     _options: <valid_options_scss>,
+         *     _module: <valid_module_scss>,
+         *     name: <module_name>
+         * }
+         * </pre>
+         * A recommended approach to build these for example might use Array.join like:
+         * <pre>
+         * var css = [];
+         *     css.push('$namespace: "' + namespace + '";')
+         *     css.push('$bgcolor: ' + bgColor + ';');
+         *     css.push('$height: ' + height + ';');
+         *     css.push("$font-family: '" + fontFamily + "';");
+         *     css.push('$dropdown-background: ' + dropdownBackground + ';');
+         *     return css.join('\n');
+         * </pre>
+         * @return {Object} Object with strings for the _options.scss and _<MODULE>.scss
+         * that can be compiled via `compass compile`
+         */
+        generate: function() {
+            // NO-OP ... this method MUST be overriden
+            throw new Error('Generate not implemented!');
+        },
+        /**
+         * Generates a simple css property as string
+         * @param  {String}  k        Key
+         * @param  {String}  v        Value
+         * @param  {Boolean} isQuoted Whether the value needs to be quoted
+         * @return {String}           css string
+         */
+        generateSimpleProperty: function(k, v, isQuoted) {
+            if (!k || !v) return;
+            if (isQuoted) {
+                return k +": '"+v+"';";
+            }
+            return k +': '+v+';';
         }
     });
     Unicorn.Models.Button = Unicorn.Models.Base.extend({
@@ -256,6 +257,59 @@
                 '$button_sizes': ['large', 'small', 'tiny'],
                 '$circle-size': '120px'
             };
+        },
+        /**
+         * Example of a custom module's implementation of generate. We place the burden
+         * on the module author to generate this, which in turn, adds flexibility. All
+         * that's required really, is that they provide properties for _options and
+         * _<module> that are "compilable" by issuing `compass compile`.
+         * @return {Object} A valid `generate` object (@see Unicorn.Models.Base.generate)
+         */
+        generate: function() {
+            var self = this;
+            var css = [];
+            var json = this.toJSON();
+            // We need to loops through these so black list them from the simple
+            // key: value properties we're about to generate
+            var blackList = this.blackList.concat(['$button_actions', '$button_sizes', '$button_styles']);
+            var mustQuoteList = ['$namespace', '$glow_namespace'];
+
+            // First work with simple props that we don't have to quote
+            var simpleProps = _.omit(json, blackList);
+            _.each(_.omit(simpleProps, mustQuoteList), function(v, k) {
+                css.push(self.generateSimpleProperty(k, v));
+            });
+
+            // These have to be quoted
+            _.each(_.pick(simpleProps, mustQuoteList), function(v, k) {
+                css.push(self.generateSimpleProperty(k, v, true));
+            });
+
+            // Now we manually build our more complex properties
+            // Button Actions
+            var buttonActions = '';
+            _.each(json['$button_actions'], function(v, k) {
+                buttonActions += "('" +k+ "' " +v+ ") ";
+            });
+            buttonActions += ';';
+            css.push('$button_actions: ' + buttonActions);
+
+            // Button Styles
+            var buttonStyles = '';
+            _.each(json['$button_styles'], function(v, k) {
+                buttonStyles += "'" + v + "' ";
+            });
+            buttonStyles += ';';
+            css.push('$button_styles: ' + buttonStyles);
+
+            // Button Sizes
+            var buttonSizes = '';
+            _.each(json['$button_sizes'], function(v, k) {
+                buttonSizes += "'" + v + "' ";
+            });
+            buttonSizes += ';';
+            css.push('$button_sizes: ' + buttonSizes);
+            return {name: this.module, _options: css.join('\n')};
         }
     });
     // Unicorn.Models.Grid = Unicorn.Models.Base.extend({
@@ -296,18 +350,13 @@
 
         build: function(e) {
             e.preventDefault();
-
-            //TODO: Just to ensure our model changes so we do jsonp/sync while we're "spiking"
-            this.model.set('remove_me_later', Math.floor(Math.random()*100));
-            //TODO: Remove above!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
             this.model.save();
         },
 
         download: function(e) {
             e.preventDefault();
             var url = 'http://localhost:5000/download/buttons?';
-            var data = this.model.toJSON();
+            var data = this.model.generate('buttons');
             url += $.param(data);
             console.log("URL: ", url);
             window.open(url, 'Download');
