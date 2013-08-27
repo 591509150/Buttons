@@ -1,0 +1,31 @@
+//////////////////////////////////////////////////////////
+// BUILD TYPES (don't edit this!)  ///////////////////////
+//////////////////////////////////////////////////////////
+// Purpose of this file is to set global flags for which
+// types we'll include in our final css build or not.
+$build-glow: false;
+$build-dropdown: false;
+$build-rounded: false;
+$build-pill: false;
+$build-circle: false;
+$build-flat: false;
+
+// For all types provided by user we mark true
+@each $type in $button_types {
+    @if $type == 'glow' {
+        $build-glow: true;
+    }
+    @else if $type == 'dropdown' {
+        $build-dropdown: true;
+    }
+    @else if $type == 'rounded' {
+        $build-rounded: true;
+    }
+    @else if $type == 'pill' {
+        $build-pill: true;
+    }
+    @else if $type == 'circle' {
+        $build-circle: true;
+    }
+}
+//@debug "$build-glow is #{$build-glow}";
