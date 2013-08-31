@@ -3,32 +3,32 @@
 //////////////////////////////////////////////////////////
 // Purpose of this file is to set global flags for which
 // types we'll include in our final css build or not.
-$build-glow: false;
-$build-dropdown: false;
-$build-rounded: false;
-$build-pill: false;
-$build-circle: false;
-$build-flat: false;
+$uni-btn-build-glow: false;
+$uni-btn-build-dropdown: false;
+$uni-btn-build-rounded: false;
+$uni-btn-build-pill: false;
+$uni-btn-build-circle: false;
+$uni-btn-build-flat: false;
 
 // For all types provided by user we mark true
-@each $type in $button_types {
-    @if $type == 'glow' {
-        $build-glow: true;
+@each $uni-btn-type in $uni-btn-button_types {
+    @if $uni-btn-type == 'glow' {
+        $uni-btn-build-glow: true;
     }
-    @else if $type == 'dropdown' {
-        $build-dropdown: true;
+    @else if $uni-btn-type == 'dropdown' {
+        $uni-btn-build-dropdown: true;
     }
-    @else if $type == 'rounded' {
-        $build-rounded: true;
+    @else if $uni-btn-type == 'rounded' {
+        $uni-btn-build-rounded: true;
     }
-    @else if $type == 'pill' {
-        $build-pill: true;
+    @else if $uni-btn-type == 'pill' {
+        $uni-btn-build-pill: true;
     }
-    @else if $type == 'circle' {
-        $build-circle: true;
+    @else if $uni-btn-type == 'circle' {
+        $uni-btn-build-circle: true;
     }
-    @else if $type == 'flat' {
-        $build-flat: true;
+    @else if $uni-btn-type == 'flat' {
+        $uni-btn-build-flat: true;
     }
 }
-//@debug "$build-glow is #{$build-glow}";
+//@debug "$uni-btn-build-glow is #{$uni-btn-build-glow}";
