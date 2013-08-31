@@ -27,5 +27,8 @@ $build-flat: false;
     @else if $type == 'circle' {
         $build-circle: true;
     }
+    @else if $type == 'flat' {
+        $build-flat: true;
+    }
 }
 //@debug "$build-glow is #{$build-glow}";
