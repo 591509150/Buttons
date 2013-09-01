@@ -78,8 +78,8 @@
         defaults: function() {
             return {
                 '$uni-btn-namespace': '.button',
-                '$uni-btn-glow_namespace': '.glow',
-                '$uni-btn-glow_color': '#2c9adb',
+                '$uni-btn-glow-namespace': '.glow',
+                '$uni-btn-glow-color': '#2c9adb',
                 '$uni-btn-bgcolor': '#CCC',
                 '$uni-btn-height': '32px',
                 '$uni-btn-font-color': '#666',
@@ -98,7 +98,7 @@
                     royal: '#87318C #FFF'
                     // ... define more as you please
                 },
-                '$uni-btn-styles': ['rounded', 'pill', 'circle', 'dropdown', 'glow', 'flat'],
+                '$uni-btn-types': ['rounded', 'pill', 'circle', 'dropdown', 'glow', 'flat'],
                 '$uni-btn-sizes': ['large', 'small', 'tiny'],
                 '$uni-btn-circle-size': '120px'
             };
