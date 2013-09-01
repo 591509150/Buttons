@@ -271,7 +271,7 @@
             var json = this.toJSON();
             // We need to loops through these so black list them from the simple
             // key: value properties we're about to generate
-            var blackList = this.blackList.concat(['$uni-btn-actions', '$uni-btn-sizes', '$uni-btn-styles']);
+            var blackList = this.blackList.concat(['$uni-btn-actions', '$uni-btn-sizes', '$uni-btn-types']);
             var mustQuoteList = ['$uni-btn-namespace', '$uni-btn-glow-namespace'];
 
             // First work with simple props that we don't have to quote
@@ -296,11 +296,11 @@
 
             // Button Styles
             var buttonStyles = '';
-            _.each(json['$uni-btn-styles'], function(v, k) {
+            _.each(json['$uni-btn-types'], function(v, k) {
                 buttonStyles += "'" + v + "' ";
             });
             buttonStyles += ';';
-            css.push('$uni-btn-styles: ' + buttonStyles);
+            css.push('$uni-btn-types: ' + buttonStyles);
 
             // Button Sizes
             var buttonSizes = '';
