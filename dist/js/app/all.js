@@ -196,11 +196,11 @@
          * A recommended approach to build these for example might use Array.join like:
          * <pre>
          * var css = [];
-         *     css.push('$namespace: "' + namespace + '";')
-         *     css.push('$bgcolor: ' + bgColor + ';');
-         *     css.push('$height: ' + height + ';');
-         *     css.push("$font-family: '" + fontFamily + "';");
-         *     css.push('$dropdown-background: ' + dropdownBackground + ';');
+         *     css.push('$uni-btn-namespace: "' + namespace + '";')
+         *     css.push('$uni-btn-bgcolor: ' + bgColor + ';');
+         *     css.push('$uni-btn-height: ' + height + ';');
+         *     css.push("$uni-btn-font-family: '" + fontFamily + "';");
+         *     css.push('$uni-btn-dropdown-background: ' + dropdownBackground + ';');
          *     return css.join('\n');
          * </pre>
          * @return {Object} Object with strings for the _options.scss and _<MODULE>.scss
@@ -232,20 +232,20 @@
         //url: 'http://options-compiler.herokuapp.com/build/'+this.module, //production
         defaults: function() {
             return {
-                '$namespace': '.button',
-                '$glow_namespace': '.glow',
-                '$glow_color': '#2c9adb',
-                '$bgcolor': '#CCC',
-                '$height': '32px',
-                '$font-color': '#666',
-                '$font-size': '14px',
-                '$font-weight': '300',
-                '$font-family': '\'HelveticaNeue-Light\', \'Helvetica Neue Light\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif',
-                '$dropdown-background': '#fcfcfc',
-                '$dropdown-link-color': '#333',
-                '$dropdown-link-hover': '#FFF',
-                '$dropdown-link-hover-background': '#3c6ab9',
-                '$button_actions': {
+                '$uni-btn-namespace': '.button',
+                '$uni-btn-glow_namespace': '.glow',
+                '$uni-btn-glow_color': '#2c9adb',
+                '$uni-btn-bgcolor': '#CCC',
+                '$uni-btn-height': '32px',
+                '$uni-btn-font-color': '#666',
+                '$uni-btn-font-size': '14px',
+                '$uni-btn-font-weight': '300',
+                '$uni-btn-font-family': '\'HelveticaNeue-Light\', \'Helvetica Neue Light\', \'Helvetica Neue\', Helvetica, Arial, \'Lucida Grande\', sans-serif',
+                '$uni-btn-dropdown-background': '#fcfcfc',
+                '$uni-btn-dropdown-link-color': '#333',
+                '$uni-btn-dropdown-link-hover': '#FFF',
+                '$uni-btn-dropdown-link-hover-background': '#3c6ab9',
+                '$uni-btn-button_actions': {
                     primary: '#00A1CB #FFF',
                     action: '#7db500 #FFF',
                     highlight: '#F18D05 #FFF',
@@ -253,9 +253,9 @@
                     royal: '#87318C #FFF'
                     // ... define more as you please
                 },
-                '$button_styles': ['rounded', 'pill', 'circle'],
-                '$button_sizes': ['large', 'small', 'tiny'],
-                '$circle-size': '120px'
+                '$uni-btn-button_styles': ['rounded', 'pill', 'circle', 'dropdown', 'glow', 'flat'],
+                '$uni-btn-button_sizes': ['large', 'small', 'tiny'],
+                '$uni-btn-circle-size': '120px'
             };
         },
         /**
@@ -271,8 +271,8 @@
             var json = this.toJSON();
             // We need to loops through these so black list them from the simple
             // key: value properties we're about to generate
-            var blackList = this.blackList.concat(['$button_actions', '$button_sizes', '$button_styles']);
-            var mustQuoteList = ['$namespace', '$glow_namespace'];
+            var blackList = this.blackList.concat(['$uni-btn-button_actions', '$uni-btn-button_sizes', '$uni-btn-button_styles']);
+            var mustQuoteList = ['$uni-btn-namespace', '$uni-btn-glow_namespace'];
 
             // First work with simple props that we don't have to quote
             var simpleProps = _.omit(json, blackList);
@@ -288,39 +288,32 @@
             // Now we manually build our more complex properties
             // Button Actions
             var buttonActions = '';
-            _.each(json['$button_actions'], function(v, k) {
+            _.each(json['$uni-btn-button_actions'], function(v, k) {
                 buttonActions += "('" +k+ "' " +v+ ") ";
             });
             buttonActions += ';';
-            css.push('$button_actions: ' + buttonActions);
+            css.push('$uni-btn-button_actions: ' + buttonActions);
 
             // Button Styles
             var buttonStyles = '';
-            _.each(json['$button_styles'], function(v, k) {
+            _.each(json['$uni-btn-button_styles'], function(v, k) {
                 buttonStyles += "'" + v + "' ";
             });
             buttonStyles += ';';
-            css.push('$button_styles: ' + buttonStyles);
+            css.push('$uni-btn-button_styles: ' + buttonStyles);
 
             // Button Sizes
             var buttonSizes = '';
-            _.each(json['$button_sizes'], function(v, k) {
+            _.each(json['$uni-btn-button_sizes'], function(v, k) {
                 buttonSizes += "'" + v + "' ";
             });
             buttonSizes += ';';
-            css.push('$button_sizes: ' + buttonSizes);
+            css.push('$uni-btn-button_sizes: ' + buttonSizes);
             return {name: this.module, _options: css.join('\n')};
         }
     });
-    // Unicorn.Models.Grid = Unicorn.Models.Base.extend({
-    //     module: 'grids',
-    //     url: 'http://localhost:5000/build/'+this.module,
-    //     //TODO define defaults here...
-    //     default: function() {
-    //         return {};
-    //     }
-    // });
-})();;(function(){
+})();
+;(function(){
     'use strict';
 
     /*globals Unicorn, Backbone, $ */
