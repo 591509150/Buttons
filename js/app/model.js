@@ -90,7 +90,7 @@
                 '$uni-btn-dropdown-link-color': '#333',
                 '$uni-btn-dropdown-link-hover': '#FFF',
                 '$uni-btn-dropdown-link-hover-background': '#3c6ab9',
-                '$uni-btn-button_actions': {
+                '$uni-btn-actions': {
                     primary: '#00A1CB #FFF',
                     action: '#7db500 #FFF',
                     highlight: '#F18D05 #FFF',
@@ -98,8 +98,8 @@
                     royal: '#87318C #FFF'
                     // ... define more as you please
                 },
-                '$uni-btn-button_styles': ['rounded', 'pill', 'circle', 'dropdown', 'glow', 'flat'],
-                '$uni-btn-button_sizes': ['large', 'small', 'tiny'],
+                '$uni-btn-styles': ['rounded', 'pill', 'circle', 'dropdown', 'glow', 'flat'],
+                '$uni-btn-sizes': ['large', 'small', 'tiny'],
                 '$uni-btn-circle-size': '120px'
             };
         },
@@ -116,8 +116,8 @@
             var json = this.toJSON();
             // We need to loops through these so black list them from the simple
             // key: value properties we're about to generate
-            var blackList = this.blackList.concat(['$uni-btn-button_actions', '$uni-btn-button_sizes', '$uni-btn-button_styles']);
-            var mustQuoteList = ['$uni-btn-namespace', '$uni-btn-glow_namespace'];
+            var blackList = this.blackList.concat(['$uni-btn-actions', '$uni-btn-sizes', '$uni-btn-styles']);
+            var mustQuoteList = ['$uni-btn-namespace', '$uni-btn-glow-namespace'];
 
             // First work with simple props that we don't have to quote
             var simpleProps = _.omit(json, blackList);
@@ -133,27 +133,27 @@
             // Now we manually build our more complex properties
             // Button Actions
             var buttonActions = '';
-            _.each(json['$uni-btn-button_actions'], function(v, k) {
+            _.each(json['$uni-btn-actions'], function(v, k) {
                 buttonActions += "('" +k+ "' " +v+ ") ";
             });
             buttonActions += ';';
-            css.push('$uni-btn-button_actions: ' + buttonActions);
+            css.push('$uni-btn-actions: ' + buttonActions);
 
             // Button Styles
             var buttonStyles = '';
-            _.each(json['$uni-btn-button_styles'], function(v, k) {
+            _.each(json['$uni-btn-styles'], function(v, k) {
                 buttonStyles += "'" + v + "' ";
             });
             buttonStyles += ';';
-            css.push('$uni-btn-button_styles: ' + buttonStyles);
+            css.push('$uni-btn-styles: ' + buttonStyles);
 
             // Button Sizes
             var buttonSizes = '';
-            _.each(json['$uni-btn-button_sizes'], function(v, k) {
+            _.each(json['$uni-btn-sizes'], function(v, k) {
                 buttonSizes += "'" + v + "' ";
             });
             buttonSizes += ';';
-            css.push('$uni-btn-button_sizes: ' + buttonSizes);
+            css.push('$uni-btn-sizes: ' + buttonSizes);
             return {name: this.module, _options: css.join('\n')};
         }
     });

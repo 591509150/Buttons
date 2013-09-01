@@ -613,9 +613,25 @@
     <!-- VENDOR JAVASCRIPT -->
     <script src="https://google-code-prettify.googlecode.com/svn/loader/prettify.js"></script>
 
-    <script src="dist/js/vendor/all.min.js"></script>
+    <!-- build:js dist/js/vendor/all.min.js -->
+    <script type="text/javascript" src="js/vendor/jquery.1.10.2.js"></script>
+    <script type="text/javascript" src="js/vendor/scrollto.js"></script>
+    <script type="text/javascript" src="js/vendor/underscore.1.5.1.js"></script>
+    <script type="text/javascript" src="js/vendor/backbone.1.0.0.js"></script>
+    <!-- endbuild -->
 
-    <script src="dist/js/app/all.min.js"></script>
+    <!-- build:js dist/js/app/all.min.js -->
+    <!-- //BUTTONS LIBRARY -->
+    <script src="js/buttons.js"></script>
+
+    <!-- //LOAD CUSTOMIZATION APP -->
+    <script src="js/app/setup.js"></script>
+    <script src="js/app/model.js"></script>
+    <script src="js/app/view-options-menu.js"></script>
+    <script src="js/app/view-showcase.js"></script>
+    <script src="js/app/app.js"></script>
+    <script src="js/main.js"></script>
+    <!-- endbuild -->
 
     <!-- GOOGLE ANALYTICS -->
     <script>

@@ -11,7 +11,7 @@ $uni-btn-build-circle: false;
 $uni-btn-build-flat: false;
 
 // For all types provided by user we mark true
-@each $uni-btn-type in $uni-btn-button_types {
+@each $uni-btn-type in $uni-btn-types {
     @if $uni-btn-type == 'glow' {
         $uni-btn-build-glow: true;
     }

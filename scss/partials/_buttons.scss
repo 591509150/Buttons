@@ -94,7 +94,7 @@ button#{$uni-btn-namespace}:disabled {
 //////////////////////////////////////////////////////////
 // SHAPES ////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
-@each $uni-btn-style in $uni-btn-button_types {
+@each $uni-btn-style in $uni-btn-types {
 
     // .button-rounded .button-pill button-circle
     #{$uni-btn-namespace}-#{$uni-btn-style} {
@@ -125,7 +125,7 @@ button#{$uni-btn-namespace}:disabled {
 //////////////////////////////////////////////////////////
 // GRADIENT STYLES ///////////////////////////////////////
 //////////////////////////////////////////////////////////
-@each $uni-btn-action in $uni-btn-button_actions {
+@each $uni-btn-action in $uni-btn-actions {
     //GET NAME & COLOR
     $uni-btn-name: nth($uni-btn-action, 1);
     $uni-btn-background: nth($uni-btn-action, 2);
@@ -181,7 +181,7 @@ button#{$uni-btn-namespace}:disabled {
     }
 }
 
-@each $uni-btn-action in $uni-btn-button_actions {
+@each $uni-btn-action in $uni-btn-actions {
     //GET NAME & COLOR
     $uni-btn-name: nth($uni-btn-action, 1);
     $uni-btn-background: nth($uni-btn-action, 2);
@@ -219,7 +219,7 @@ button#{$uni-btn-namespace}:disabled {
 // SIZES /////////////////////////////////////////////////
 //////////////////////////////////////////////////////////
 
-@each $uni-btn-size in $uni-btn-button_sizes {
+@each $uni-btn-size in $uni-btn-sizes {
 
     // .button-large .button-small .button-tiny
     #{$uni-btn-namespace}-#{$uni-btn-size} {
@@ -267,10 +267,10 @@ button#{$uni-btn-namespace}:disabled {
 //////////////////////////////////////////////////////////
 @if $uni-btn-build-glow {
     #{$uni-btn-namespace} {
-        &#{$uni-btn-glow_namespace} {
+        &#{$uni-btn-glow-namespace} {
             @include glow;
         }
-        &#{$uni-btn-glow_namespace}:active {
+        &#{$uni-btn-glow-namespace}:active {
             @include no_animation;
             @include box-shadow(inset 0px 1px 3px rgba(0, 0, 0, .3), 0px 1px 0px rgba(255, 255, 255, 1));
         }
